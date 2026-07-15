@@ -1,45 +1,64 @@
-import { useMemo, useState } from "react";
-import { defaultAssumptions, computeMetrics } from "./lib/calculations.js";
-import Header from "./components/Header.jsx";
-import BehaviorInputs from "./components/BehaviorInputs.jsx";
-import FinanceInputs from "./components/FinanceInputs.jsx";
-import ResultsSummary from "./components/ResultsSummary.jsx";
-import CashflowChart from "./components/CashflowChart.jsx";
+// ============================================================================
+// App.jsx — Solar Feasibility Studio shell (SPEC-UPGRADE.md Phase 3, §5).
+// Sidebar + top bar + routed pages. The legacy single-page calculator UI
+// (components/…) was replaced by this shell; the legacy engine remains in
+// lib/calculations.js until every page runs on the new engine.
+// ============================================================================
+
+import { Routes, Route } from "react-router-dom";
+import { AppProvider } from "./state/AppContext.jsx";
+import Sidebar from "./shell/Sidebar.jsx";
+import TopBar from "./shell/TopBar.jsx";
+import OverviewPage from "./pages/OverviewPage.jsx";
+import ProjectSystemPage from "./pages/ProjectSystemPage.jsx";
+import FinancePage from "./pages/FinancePage.jsx";
+import ComingSoonPage from "./pages/ComingSoonPage.jsx";
 
 export default function App() {
-  const [assumptions, setAssumptions] = useState(defaultAssumptions);
-
-  const update = (patch) => setAssumptions((prev) => ({ ...prev, ...patch }));
-
-  const metrics = useMemo(() => computeMetrics(assumptions), [assumptions]);
-
   return (
-    <div className="min-h-screen bg-paper">
-      <Header />
-
-      <main className="max-w-5xl mx-auto px-5 py-8 grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="space-y-5">
-          <BehaviorInputs assumptions={assumptions} update={update} />
-          <FinanceInputs assumptions={assumptions} update={update} />
+    <AppProvider>
+      <div className="min-h-screen bg-surface text-ink flex">
+        <Sidebar />
+        <div className="flex-1 min-w-0 flex flex-col">
+          <TopBar />
+          <main className="flex-1 p-6">
+            <Routes>
+              <Route path="/" element={<OverviewPage />} />
+              <Route path="/project" element={<ProjectSystemPage />} />
+              <Route path="/finance" element={<FinancePage />} />
+              <Route
+                path="/costs"
+                element={<ComingSoonPage titleKey="costs" phase={4} />}
+              />
+              <Route
+                path="/energy"
+                element={<ComingSoonPage titleKey="energy" phase={4} />}
+              />
+              <Route
+                path="/cashflow"
+                element={<ComingSoonPage titleKey="cashflow" phase={5} />}
+              />
+              <Route
+                path="/sensitivity"
+                element={<ComingSoonPage titleKey="sensitivity" phase={6} />}
+              />
+              <Route
+                path="/comparison"
+                element={<ComingSoonPage titleKey="comparison" phase={6} />}
+              />
+              <Route
+                path="/portfolio"
+                element={<ComingSoonPage titleKey="portfolio" phase={6} />}
+              />
+              <Route
+                path="/methodology"
+                element={<ComingSoonPage titleKey="methodology" phase={6} />}
+              />
+              <Route path="*" element={<OverviewPage />} />
+            </Routes>
+          </main>
         </div>
-
-        <div className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-          <ResultsSummary metrics={metrics} assumptions={assumptions} />
-          <CashflowChart metrics={metrics} assumptions={assumptions} />
-        </div>
-      </main>
-
-      <footer className="max-w-5xl mx-auto px-5 py-8 text-xs text-ink/40 leading-relaxed">
-        <p>
-          เครื่องมือนี้เป็นการประมาณการเบื้องต้นเพื่อการศึกษาเท่านั้น ไม่ใช่คำแนะนำทางการเงินหรือการลงทุน
-          ตัวเลขจริงขึ้นอยู่กับใบเสนอราคา พฤติกรรมการใช้ไฟ และเงื่อนไขสินเชื่อของแต่ละบุคคล
-          ควรปรึกษาผู้ติดตั้งและที่ปรึกษาทางการเงินก่อนตัดสินใจ
-        </p>
-        <p className="mt-2">
-          อ้างอิง: ประกาศการไฟฟ้านครหลวง ที่ 58/2569 เรื่อง การรับซื้อไฟฟ้าโครงการผลิตไฟฟ้าจากพลังงานแสงอาทิตย์ที่ติดตั้งบนหลังคา
-          สำหรับภาคประชาชน ประเภทบ้านอยู่อาศัย
-        </p>
-      </footer>
-    </div>
+      </div>
+    </AppProvider>
   );
 }
