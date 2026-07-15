@@ -266,4 +266,9 @@ describe("npvAt / solveIrr sanity", () => {
   it("no sign change -> null", () => {
     expect(solveIrr([100, 10, 10])).toBeNull();
   });
+
+  it("all-zero stream -> null (empty-project regression)", () => {
+    expect(solveIrr([0, 0, 0])).toBeNull();
+    expect(solveIrr([-100, 0, 0])).toBeNull();
+  });
 });

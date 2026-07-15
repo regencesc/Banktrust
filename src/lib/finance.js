@@ -10,6 +10,12 @@ export function npvAt(rate, cashflows) {
 
 /** IRR via bisection; null when no sign change in [-90%, +500%]. */
 export function solveIrr(cashflows) {
+  // IRR is undefined without both an outflow and an inflow (an all-zero
+  // stream would otherwise bisect on a flat function and return garbage).
+  const hasPositive = cashflows.some((cf) => cf > 0);
+  const hasNegative = cashflows.some((cf) => cf < 0);
+  if (!hasPositive || !hasNegative) return null;
+
   let lo = -0.9;
   let hi = 5;
   let flo = npvAt(lo, cashflows);
