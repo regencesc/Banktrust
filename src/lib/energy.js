@@ -53,13 +53,19 @@ export function computeEnergyYear(t, { system = {}, energy = {} }) {
 
   if (hasProfile) {
     // Interval mode: month-by-month min(pv, load), scaled by degradation/growth.
-    // Monthly PV comes from measured/simulated data, so availability and
+    // usePvFromProfile=false keeps the load shape from the file but spreads
+    // the parametric annual yield evenly across months ("ใช้ PV จากไฟล์" off).
+    // Profile PV comes from measured/simulated data, so availability and
     // loss factors are assumed to be already included.
+    const usePvFromProfile = energy.usePvFromProfile !== false;
+    const parametricMonthlyPv =
+      (dcKwp * (energy.specificYield || 0) * availability * lossFactor * degrade) /
+      12;
     grossYield = 0;
     load = 0;
     selfUse = 0;
     for (const m of energy.monthlyProfile) {
-      const pv = (m.pvKwh || 0) * degrade;
+      const pv = usePvFromProfile ? (m.pvKwh || 0) * degrade : parametricMonthlyPv;
       const ld = (m.loadKwh || 0) * growth;
       grossYield += pv;
       load += ld;

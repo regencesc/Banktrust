@@ -81,6 +81,7 @@ export function createEmptyProject(name = "โครงการใหม่") {
       loadGrowth: null,
       selfConsumptionPct: null,
       monthlyProfile: null,
+      usePvFromProfile: true,
       importRate: null,
       exportRate: null,
       tariffEscalation: null,

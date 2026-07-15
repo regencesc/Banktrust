@@ -12,6 +12,8 @@ import TopBar from "./shell/TopBar.jsx";
 import OverviewPage from "./pages/OverviewPage.jsx";
 import ProjectSystemPage from "./pages/ProjectSystemPage.jsx";
 import FinancePage from "./pages/FinancePage.jsx";
+import CostsPage from "./pages/CostsPage.jsx";
+import EnergyPage from "./pages/EnergyPage.jsx";
 import ComingSoonPage from "./pages/ComingSoonPage.jsx";
 
 export default function App() {
@@ -26,14 +28,8 @@ export default function App() {
               <Route path="/" element={<OverviewPage />} />
               <Route path="/project" element={<ProjectSystemPage />} />
               <Route path="/finance" element={<FinancePage />} />
-              <Route
-                path="/costs"
-                element={<ComingSoonPage titleKey="costs" phase={4} />}
-              />
-              <Route
-                path="/energy"
-                element={<ComingSoonPage titleKey="energy" phase={4} />}
-              />
+              <Route path="/costs" element={<CostsPage />} />
+              <Route path="/energy" element={<EnergyPage />} />
               <Route
                 path="/cashflow"
                 element={<ComingSoonPage titleKey="cashflow" phase={5} />}

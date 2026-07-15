@@ -127,6 +127,28 @@ describe("interval mode — 12-month profile", () => {
     expect(y3.grossYield).toBeCloseTo((6 * 1200 + 6 * 800) * deg, 6);
     expect(y3.load).toBeCloseTo(12000 * grow, 6);
   });
+
+  it("usePvFromProfile=false keeps the load shape but uses parametric PV", () => {
+    const e = computeEnergyYear(1, {
+      system: baseSystem,
+      energy: { ...energy, usePvFromProfile: false },
+    });
+    // parametric annual = 10 kWp × 1400 = 14000, spread evenly per month
+    expect(e.grossYield).toBeCloseTo(14000, 6);
+    // monthly pv = 14000/12 ≈ 1166.7 > load in the 6 low-pv months (1000)
+    const monthlyPv = 14000 / 12;
+    expect(e.selfUse).toBeCloseTo(12 * Math.min(monthlyPv, 1000), 6);
+    // profile pvKwh values are ignored entirely
+    const zeroPv = computeEnergyYear(1, {
+      system: baseSystem,
+      energy: {
+        ...energy,
+        usePvFromProfile: false,
+        monthlyProfile: energy.monthlyProfile.map((m) => ({ ...m, pvKwh: 0 })),
+      },
+    });
+    expect(zeroPv.grossYield).toBeCloseTo(e.grossYield, 6);
+  });
 });
 
 describe("battery — simple annual shift model", () => {
