@@ -1,8 +1,44 @@
 // ============================================================================
-// Solar Rooftop Financial Model — core calculation engine
-// Ported 1:1 from the Excel workbook (Assumptions / Cashflow / Outputs sheets)
-// so results stay consistent with the validated spreadsheet.
+// Solar Rooftop Financial Model — calculation entry point
+//
+// New engine (SPEC-UPGRADE.md Phase 1): computeProject() orchestrates the
+// modular engine in energy.js / costs.js / finance.js against the Project
+// data model (§3). sensitivity.js and scoring.js build on computeProject.
+//
+// Legacy engine (defaultAssumptions / buildCashflow / computeMetrics) is kept
+// below untouched — the current UI still consumes it until Phase 3, and its
+// numbers are locked to the validated Excel workbook.
 // ============================================================================
+
+import { deriveSystem, buildEnergySeries } from "./energy.js";
+import { buildCostSeries } from "./costs.js";
+import { computeFinance } from "./finance.js";
+
+/**
+ * Full evaluation of one Project (§3 data model):
+ * derived system → energy series → cost series → cashflows and metrics.
+ */
+export function computeProject(project) {
+  const life = project.projectLife;
+  const derived = deriveSystem(project.system);
+  const energySeries = buildEnergySeries(project, life);
+  const costSeries = buildCostSeries(project.costs, life);
+  const finance = computeFinance(project, energySeries, costSeries);
+
+  const ef = project.gridEmissionFactor || 0;
+  const co2AvoidedYear1Kg = ef > 0 ? energySeries[0].grossYield * ef : null;
+  const co2AvoidedLifetimeKg =
+    ef > 0 ? energySeries.reduce((acc, r) => acc + r.grossYield, 0) * ef : null;
+
+  return {
+    derived,
+    energySeries,
+    costSeries,
+    ...finance,
+    co2AvoidedYear1Kg,
+    co2AvoidedLifetimeKg,
+  };
+}
 
 export const defaultAssumptions = {
   // --- Technical ---
