@@ -70,12 +70,72 @@ export const th = {
 
   overview: {
     title: "ภาพรวม",
-    checklistTitle: "ความพร้อมของข้อมูล",
-    checklistHint:
-      "กรอกข้อมูลให้ครบ 5 ส่วนเพื่อให้ผลวิเคราะห์และคะแนนคัดกรองน่าเชื่อถือ",
     goFill: "ไปกรอก",
-    dashboardNote:
-      "Dashboard ฉบับเต็ม (การ์ด KPI, กราฟกระแสเงินสด, Data & Risk Checks) จะเปิดใช้ใน Phase 5",
+    kpiEquityNpv: "Equity NPV",
+    kpiEquityNpvSub: (rate) => `ที่ discount rate ${rate}`,
+    kpiEquityIrr: "Equity IRR",
+    kpiEquityIrrSub: (rate) => `เทียบ hurdle ${rate}`,
+    kpiPayback: "Simple Payback",
+    kpiPaybackSub: (d) => `Discounted: ${d}`,
+    kpiLcoe: "LCOE",
+    kpiLcoeSub: (rate) => `เทียบค่าไฟ ${rate} ฿/kWh`,
+    kpiLcoeUnit: "฿/kWh",
+    kpiGen: "ผลผลิตปี 1",
+    kpiGenSub: (sy) => `Specific yield ${sy} kWh/kWp`,
+    kpiDscr: "Min DSCR",
+    kpiDscrSub: (target) => `เป้า ≥ ${target}`,
+    kpiDscrNoLoan: "ไม่มีเงินกู้",
+    cumulativeChart: "กระแสเงินสดสะสม (Equity)",
+    loadPvChart: "โหลด vs ผลผลิต PV ตลอดอายุโครงการ",
+    chartLoading: "กำลังโหลดกราฟ…",
+    chartEmpty: "กรอกข้อมูลระบบ ต้นทุน และค่าไฟก่อน กราฟจะแสดงที่นี่",
+    seriesCumulative: "สะสม",
+    seriesLoad: "โหลด",
+    seriesPv: "ผลิต PV",
+    investmentSummary: "สรุปเงินลงทุน",
+    grossCapexLabel: "Gross CAPEX",
+    debtLabel: "เงินกู้",
+    equityLabel: "ส่วนทุน",
+    taxIncentiveLabel: "สิทธิประโยชน์ภาษีปี 1",
+    investmentEmpty: "ยังไม่มีรายการต้นทุน — เพิ่มในหน้า ต้นทุน",
+    riskTitle: "Data & Risk Checks",
+    riskAllClear: "ไม่พบประเด็นที่ต้องระวังจากข้อมูลปัจจุบัน",
+  },
+
+  risk: {
+    dataIncomplete: (n) => `ข้อมูลยังไม่ครบ ${n} ส่วน — ผลวิเคราะห์อาจยังไม่น่าเชื่อถือ`,
+    discountRateMissing:
+      "ยังไม่ได้กำหนด discount rate — NPV, discounted payback และ LCOE จะไม่ถูกคิดลด",
+    dscrBelowTarget: (min, target) =>
+      `Min DSCR ${min} ต่ำกว่าเป้า ${target} — กระแสเงินสดอาจไม่พอชำระหนี้บางปี`,
+    dcAcRatio: (r) => `DC/AC ratio ${r} อยู่นอกช่วงปกติ (0.9–1.5) — ตรวจสอบขนาด inverter`,
+    screeningMode:
+      "กำลังใช้ % self-consumption แบบ annual screening — ใช้โปรไฟล์ 12 เดือนเพื่อความแม่นยำกว่า",
+    curtailment: (kwh) =>
+      `พลังงานถูก curtail จากเพดานส่งออกรวม ${kwh} kWh ตลอดอายุโครงการ`,
+    neverPaysBack: "โครงการไม่คืนทุนภายในอายุโครงการตามข้อมูลปัจจุบัน",
+  },
+
+  cashflowPage: {
+    title: "Cash Flow",
+    subtitle: "ตรวจย้อนทุกตัวเลขได้ทีละปี — ตัวเลขสรุปทุกตัวมาจากตารางนี้",
+    exportCsv: "Export CSV",
+    empty: "ยังไม่มีข้อมูลเพียงพอ — กรอกขนาดระบบ ต้นทุน และค่าไฟก่อน",
+    paybackBadge: (year) => `คืนทุนในปีที่ ${year}`,
+    colYear: "ปี",
+    colGen: "ผลิต (kWh)",
+    colSelfUse: "ใช้เอง (kWh)",
+    colExport: "ส่งออก (kWh)",
+    colSavings: "ประหยัด (฿)",
+    colExportRev: "ขายไฟ (฿)",
+    colOpex: "OPEX (฿)",
+    colReplacement: "เปลี่ยนอุปกรณ์ (฿)",
+    colInterest: "ดอกเบี้ย (฿)",
+    colPrincipal: "เงินต้น (฿)",
+    colTax: "ภาษี (฿)",
+    colEquityCf: "Equity CF (฿)",
+    colCumulative: "สะสม (฿)",
+    colDscr: "DSCR",
   },
 
   projectPage: {

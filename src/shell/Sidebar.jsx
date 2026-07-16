@@ -20,7 +20,7 @@ const MENU = [
   { to: "/energy", key: "energy" },
   { to: "/finance", key: "finance" },
   { to: "/sensitivity", key: "sensitivity", phase: 6 },
-  { to: "/cashflow", key: "cashflow", phase: 5 },
+  { to: "/cashflow", key: "cashflow" },
   { to: "/methodology", key: "methodology", phase: 6 },
 ];
 

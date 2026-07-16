@@ -14,6 +14,7 @@ import ProjectSystemPage from "./pages/ProjectSystemPage.jsx";
 import FinancePage from "./pages/FinancePage.jsx";
 import CostsPage from "./pages/CostsPage.jsx";
 import EnergyPage from "./pages/EnergyPage.jsx";
+import CashflowPage from "./pages/CashflowPage.jsx";
 import ComingSoonPage from "./pages/ComingSoonPage.jsx";
 
 export default function App() {
@@ -30,10 +31,7 @@ export default function App() {
               <Route path="/finance" element={<FinancePage />} />
               <Route path="/costs" element={<CostsPage />} />
               <Route path="/energy" element={<EnergyPage />} />
-              <Route
-                path="/cashflow"
-                element={<ComingSoonPage titleKey="cashflow" phase={5} />}
-              />
+              <Route path="/cashflow" element={<CashflowPage />} />
               <Route
                 path="/sensitivity"
                 element={<ComingSoonPage titleKey="sensitivity" phase={6} />}
