@@ -20,7 +20,6 @@ export const th = {
     sensitivity: "Sensitivity",
     cashflow: "Cash Flow",
     methodology: "วิธีคำนวณ",
-    comingSoon: "เร็วๆ นี้",
   },
 
   topbar: {
@@ -64,8 +63,6 @@ export const th = {
     noProjectBody:
       "ทุกอย่างเริ่มจากค่าว่าง — กรอกข้อมูลระบบ ต้นทุน และเงื่อนไขการเงินของโครงการจริงของคุณ แล้วผลวิเคราะห์จะอัปเดตทันที",
     createProject: "สร้างโครงการ",
-    comingSoonTitle: "ส่วนนี้กำลังพัฒนา",
-    comingSoonBody: (phase) => `หน้านี้จะเปิดใช้งานใน Phase ${phase} ตามแผนอัปเกรด`,
   },
 
   overview: {
@@ -297,6 +294,141 @@ export const th = {
     kwhPerKwpYear: "kWh/kWp/ปี",
     kwhPerYear: "kWh/ปี",
     bahtPerKwh: "฿/kWh",
+  },
+
+  sensitivityPage: {
+    title: "Sensitivity",
+    subtitle: "ทุกช่องคำนวณผ่าน engine เดียวกับผลลัพธ์หลัก ไม่ใช่การประมาณ",
+    empty: "ต้องมีรายการต้นทุนและข้อมูลพลังงานก่อน จึงจะวิเคราะห์ sensitivity ได้",
+    heatmapTitle: "Equity NPV: ผลผลิต × CAPEX (±20%)",
+    yieldAxis: "ผลผลิต",
+    capexAxis: "CAPEX",
+    breakEvenTitle: "จุดคุ้มทุน (Break-even)",
+    beTariff: "Tariff multiplier ที่ NPV = 0",
+    beTariffHint: "ค่าไฟ+ราคาขายต้องลดลงเหลือกี่เท่าของปัจจุบัน โครงการจึงเริ่มไม่คุ้ม",
+    beImportRate: "ค่าไฟต่ำสุดที่ยังคุ้ม",
+    beImportRateHint: "break-even import rate (฿/kWh)",
+    beCapex: "CAPEX แพงสุดที่ยังคุ้ม",
+    beCapexHint: "ราคาลงทุนขยับขึ้นได้กี่เท่าก่อน NPV ติดลบ",
+    beNone: "ไม่มีจุดคุ้มทุนในช่วงค้นหา",
+    scenarioTitle: "ฉากจำลอง (Scenarios)",
+    scenarioDownside: "Downside",
+    scenarioDownsideHint: "ผลผลิต −20% / CAPEX +20%",
+    scenarioBase: "Base",
+    scenarioBaseHint: "ตามสมมติฐานปัจจุบัน",
+    scenarioUpside: "Upside",
+    scenarioUpsideHint: "ผลผลิต +20% / CAPEX −20%",
+  },
+
+  comparisonPage: {
+    title: "Comparison ราคาเสนอ",
+    subtitle: "เทียบหลายแพ็กเกจ/ใบเสนอราคาบนสมมติฐานพลังงานและการเงินชุดเดียวกัน",
+    addPackage: "เพิ่มแพ็กเกจ",
+    deletePackage: "ลบแพ็กเกจ",
+    packagesTitle: "แพ็กเกจที่จะเปรียบเทียบ",
+    resultsTitle: "ผลการเปรียบเทียบ",
+    emptyPackages: "ยังไม่มีแพ็กเกจ — เพิ่มแพ็กเกจแรกจากใบเสนอราคาที่ได้รับ",
+    notReady: "กรอกขนาด (kW) และราคาเสนอ เพื่อคำนวณแพ็กเกจนี้",
+    fieldName: "ชื่อแพ็กเกจ / ผู้เสนอ",
+    fieldPvKw: "ขนาด PV",
+    fieldBattery: "แบตเตอรี่",
+    fieldPrice: "ราคาเสนอรวม",
+    fieldOpex: "OPEX ต่อปี",
+    fieldReplYear: "ปีเปลี่ยนอุปกรณ์",
+    fieldReplPct: "ค่าเปลี่ยน (%CAPEX)",
+    bestNpv: "คุ้มที่สุด (NPV)",
+    fastest: "เร็วสุด",
+    payback: "คืนทุน",
+    npv: "Equity NPV",
+    irr: "Equity IRR",
+    valueYear1: "ประหยัด+รายได้ปี 1",
+    pricePerKw: "ราคาต่อ kW",
+    neverPayback: "ไม่คืนทุน",
+    baseAssumptionsNote:
+      "ใช้สมมติฐานพลังงาน/ค่าไฟ/การเงินจากโครงการปัจจุบัน — แก้ได้ที่หน้า พลังงานและค่าไฟ / การเงิน",
+  },
+
+  portfolioPage: {
+    title: "เปรียบเทียบโปรเจกต์",
+    subtitle: "ภาพรวมทุกโครงการในพอร์ต คลิกชื่อเพื่อสลับไปทำงานกับโครงการนั้น",
+    empty: "ยังไม่มีโครงการในพอร์ต",
+    colName: "โครงการ",
+    colLocation: "สถานที่",
+    colKwp: "kWp",
+    colCapex: "Net CAPEX",
+    colNpv: "Equity NPV",
+    colIrr: "E-IRR",
+    colPayback: "Payback",
+    colLcoe: "LCOE",
+    colDscr: "MinDSCR",
+    colScore: "Score",
+    colVerdict: "ผลคัดกรอง",
+    totalRow: "รวมทั้งพอร์ต",
+    currencyNote:
+      "หมายเหตุ: แถวรวมบวกมูลค่าโดยตรง — หากโครงการใช้ต่างสกุลเงิน ให้ตีความแถวรวมด้วยความระมัดระวัง",
+  },
+
+  methodologyPage: {
+    title: "วิธีคำนวณ",
+    intro:
+      "ทุกตัวเลขในแอปนี้คำนวณจากสูตรด้านล่างทั้งหมด ไม่มีกล่องดำ — ตัวเลขสรุปทุกตัวตรวจย้อนได้จากตาราง Cash Flow รายปี",
+    sections: [
+      {
+        title: "1. พลังงาน (รายปี t = 1..อายุโครงการ)",
+        body: "ผลผลิตเสื่อมตาม degradation ทุกปี โหลดโตตาม load growth โหมด annual ใช้ % ใช้เอง โหมด interval ใช้ min(PV, โหลด) รายเดือน แบตเตอรี่เป็นโมเดลอย่างง่าย: ย้ายพลังงานส่วนเกินมาแทนการซื้อไฟ ไม่เกินความจุ×DoD×RTE×365 ต่อปี และไม่เกินโหลดที่เหลือ ส่วนเกินจากเพดานส่งออกถูก curtail (ไม่ได้เงิน)",
+        formulas: [
+          "grossYield_t = dcKwp × specificYield × availability × (1 − losses ถ้าคิดแยก) × (1 − degradation)^(t−1)",
+          "selfUse_t = min(grossYield_t × %ใช้เอง, load_t)   [โหมด annual]",
+          "battery: shift_t = min(export_t, kWh × DoD × RTE × 365, โหลดที่เหลือ)",
+          "export_t ถูก cap ด้วย exportCapKw × specificYield × availability × (1−deg)^(t−1)",
+          "savings_t = selfUse_t × ค่าไฟ × (1+escalation)^(t−1) + demand charge",
+          "exportRevenue_t = export_t × ราคาขาย เฉพาะ t ≤ ระยะเวลารับซื้อ",
+        ],
+      },
+      {
+        title: "2. ต้นทุน",
+        body: "ทุกรายการ CAPEX/OPEX รวมจาก line items — VAT ถูกนับเป็นต้นทุนเมื่อขอคืนไม่ได้",
+        formulas: [
+          "รายการ CAPEX สุทธิ = จำนวน × ราคา/หน่วย × (1 − ส่วนลด) × (1 + VAT ถ้าขอคืนไม่ได้)",
+          "Replacement_t = Σ รายการที่ครบรอบปีเปลี่ยน (k × ปีเปลี่ยน, k ≤ รอบซ้ำ) × %ค่าเปลี่ยน × ราคารายการ",
+          "OPEX_t = Σ รายการ active ในปี t (ปีเริ่ม/สิ้นสุด/ทุก N ปี) × (1+escalation)^(t−1)",
+        ],
+      },
+      {
+        title: "3. การเงินและภาษี",
+        body: "เงินกู้: ช่วง grace จ่ายดอกเบี้ยอย่างเดียว หลังจากนั้นผ่อนแบบ annuity รายปี ภาษีนิติบุคคลคิดค่าเสื่อมเส้นตรงและหักดอกเบี้ยได้ (ผลขาดทุนไม่ยกยอด) โหมดบุคคลธรรมดาใช้สิทธิลดหย่อนครั้งเดียวปีแรก ปีสุดท้ายหักค่ารื้อถอน",
+        formulas: [
+          "Debt = GrossCAPEX × debt ratio ; Equity = ส่วนที่เหลือ",
+          "Depreciation_t = (GrossCAPEX × สัดส่วนคิดค่าเสื่อม) / จำนวนปี   (t ≤ จำนวนปี)",
+          "EBITDA_t = savings + exportRevenue + รายได้อื่น − OPEX",
+          "Tax_t = max(0, EBITDA − Depreciation − Interest) × อัตราภาษี   [corporate]",
+          "ProjectCF_t = EBITDA − Replacement − Tax(ไม่รวมผลดอกเบี้ย) ; ปี 0 = −GrossCAPEX",
+          "EquityCF_t = EBITDA − Replacement − ดอกเบี้ย − เงินต้น − Tax ; ปี 0 = −Equity",
+          "DSCR_t = (EBITDA − Tax) / ยอดชำระหนี้ปีนั้น",
+        ],
+      },
+      {
+        title: "4. ตัวชี้วัด",
+        formulas: [
+          "NPV = Σ CF_t / (1+discount rate)^t",
+          "IRR = อัตราที่ทำให้ NPV = 0 (หาแบบ bisection)",
+          "Simple Payback = ปีที่กระแสเงินสดสะสม (ไม่คิดลด) พลิกเป็นบวก + สัดส่วนภายในปี",
+          "Discounted Payback = เช่นเดียวกันแต่คิดลดทุกปีก่อนสะสม",
+          "LCOE = (CAPEX + PV(OPEX+Replacement)) / PV(พลังงานที่ผลิต)",
+        ],
+      },
+      {
+        title: "5. Sensitivity และ Break-even",
+        body: "ตาราง 5×5 ขยับผลผลิตและ CAPEX ทีละ 10% ในช่วง ±20% แล้วรัน engine ใหม่ทุกช่อง จุด break-even หาโดย bisection บน engine จริง — tariff multiplier, ค่าไฟต่ำสุด, และ CAPEX สูงสุดที่ยังทำให้ Equity NPV = 0",
+      },
+      {
+        title: "6. Screening Score (0–100)",
+        body: "ถ่วงน้ำหนัก: IRR เทียบ hurdle (30 คะแนน — เต็มเมื่อ IRR ≥ 2×discount rate), Payback เทียบอายุโครงการ (25 — เต็มเมื่อคืนทุนทันที เหลือ 0 เมื่อไม่คืนทุน), NPV > 0 (20 — ได้/ไม่ได้), Min DSCR เทียบเป้า (15 — เต็มเมื่อไม่มีเงินกู้หรือ DSCR ≥ เป้า), ความครบของข้อมูล (10 — ข้อละ 2 คะแนน 5 ข้อ) ป้ายคำตัดสิน: ≥80 น่าสนใจสำหรับศึกษาต่อ · 50–79 พอไปได้ ควรปรับสมมติฐาน · <50 ยังไม่คุ้มตามข้อมูลปัจจุบัน",
+      },
+    ],
+    disclaimerTitle: "ข้อจำกัดความรับผิดชอบ",
+    disclaimer:
+      "ผลลัพธ์ทั้งหมดเป็นการวิเคราะห์เพื่อช่วยตัดสินใจจากข้อมูลที่ผู้ใช้กรอกเท่านั้น ไม่ใช่การรับประกันผลตอบแทน ค่าอัตรารับซื้อไฟฟ้า มาตรการภาษี และค่าไฟ อ้างอิงประกาศ ณ วันที่พัฒนา ผู้ใช้ควรตรวจสอบประกาศฉบับล่าสุดและปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจลงทุนจริง",
   },
 
   checks: {

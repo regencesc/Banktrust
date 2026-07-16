@@ -9,19 +9,18 @@ import {
 import ScoreCard from "./ScoreCard.jsx";
 import { SunIcon } from "./EmptyState.jsx";
 
-// Menu order per SPEC-UPGRADE.md §5. `phase` marks pages arriving later —
-// they stay navigable and show a coming-soon empty state.
+// Menu order per SPEC-UPGRADE.md §5.
 const MENU = [
   { to: "/", key: "overview" },
-  { to: "/comparison", key: "comparison", phase: 6 },
-  { to: "/portfolio", key: "portfolio", phase: 6 },
+  { to: "/comparison", key: "comparison" },
+  { to: "/portfolio", key: "portfolio" },
   { to: "/project", key: "projectSystem" },
   { to: "/costs", key: "costs" },
   { to: "/energy", key: "energy" },
   { to: "/finance", key: "finance" },
-  { to: "/sensitivity", key: "sensitivity", phase: 6 },
+  { to: "/sensitivity", key: "sensitivity" },
   { to: "/cashflow", key: "cashflow" },
-  { to: "/methodology", key: "methodology", phase: 6 },
+  { to: "/methodology", key: "methodology" },
 ];
 
 export default function Sidebar() {
@@ -128,9 +127,6 @@ export default function Sidebar() {
                 }
               >
                 <span>{strings.nav[item.key]}</span>
-                {item.phase && (
-                  <span className="text-[10px] text-ink/30">P{item.phase}</span>
-                )}
               </NavLink>
             </li>
           ))}

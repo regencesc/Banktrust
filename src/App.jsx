@@ -15,7 +15,10 @@ import FinancePage from "./pages/FinancePage.jsx";
 import CostsPage from "./pages/CostsPage.jsx";
 import EnergyPage from "./pages/EnergyPage.jsx";
 import CashflowPage from "./pages/CashflowPage.jsx";
-import ComingSoonPage from "./pages/ComingSoonPage.jsx";
+import SensitivityPage from "./pages/SensitivityPage.jsx";
+import ComparisonPage from "./pages/ComparisonPage.jsx";
+import PortfolioPage from "./pages/PortfolioPage.jsx";
+import MethodologyPage from "./pages/MethodologyPage.jsx";
 
 export default function App() {
   return (
@@ -32,22 +35,10 @@ export default function App() {
               <Route path="/costs" element={<CostsPage />} />
               <Route path="/energy" element={<EnergyPage />} />
               <Route path="/cashflow" element={<CashflowPage />} />
-              <Route
-                path="/sensitivity"
-                element={<ComingSoonPage titleKey="sensitivity" phase={6} />}
-              />
-              <Route
-                path="/comparison"
-                element={<ComingSoonPage titleKey="comparison" phase={6} />}
-              />
-              <Route
-                path="/portfolio"
-                element={<ComingSoonPage titleKey="portfolio" phase={6} />}
-              />
-              <Route
-                path="/methodology"
-                element={<ComingSoonPage titleKey="methodology" phase={6} />}
-              />
+              <Route path="/sensitivity" element={<SensitivityPage />} />
+              <Route path="/comparison" element={<ComparisonPage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/methodology" element={<MethodologyPage />} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </main>
