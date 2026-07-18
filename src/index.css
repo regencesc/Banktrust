@@ -6,29 +6,3 @@ body {
   font-family: "Sarabun", system-ui, sans-serif;
   background-color: #f7f8fa;
 }
-
-input[type="range"] {
-  -webkit-appearance: none;
-  height: 4px;
-  border-radius: 999px;
-  background: #ded8c4;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #0f5c5b;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-input[type="range"]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #0f5c5b;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}

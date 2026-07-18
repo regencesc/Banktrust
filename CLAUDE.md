@@ -4,83 +4,100 @@
 
 ## โปรเจกต์คืออะไร
 
-เว็บคำนวณความคุ้มค่าการลงทุนโซลาร์รูฟท็อปสำหรับบ้านอยู่อาศัย ให้บุคคลทั่วไปกรอกข้อมูลของตัวเอง
-แล้วเห็น NPV, IRR, ระยะเวลาคืนทุน ทันที ตามเกณฑ์รับซื้อไฟฟ้าส่วนเกินของ กฟน. (ประกาศที่ 58/2569)
-เป็น static site ล้วน ๆ (Vite + React + Tailwind) ไม่มี backend คำนวณทั้งหมดในเบราว์เซอร์
+**Solar Feasibility Studio** — เว็บแอปวิเคราะห์ความคุ้มค่าการลงทุน (techno-economic feasibility)
+โครงการ Solar Rooftop ระดับมืออาชีพ รองรับหลายโครงการ (portfolio), Cost Database รายบรรทัด,
+ภาษีนิติบุคคล/บุคคลธรรมดา, เงินกู้+Debt Schedule, Sensitivity/Break-even, เปรียบเทียบใบเสนอราคา
+และ Screening Score — อัปเกรดมาจากเว็บคำนวณบ้านเดี่ยวตามสเปกใน **`SPEC-UPGRADE.md`**
+(ทำครบทั้ง 7 Phases แล้ว)
+
+เป็น static site ล้วน (Vite + React + Tailwind + react-router HashRouter) **ไม่มี backend** —
+คำนวณทั้งหมดในเบราว์เซอร์ ข้อมูลเก็บใน localStorage (autosave + Export/Import JSON)
 
 ## กติกาสำคัญที่ต้องยึดตาม
 
-1. **`src/lib/calculations.js` คือ single source of truth ของทุกสูตรการเงิน** — เป็น pure JS
-   function ไม่ผูก React ห้ามคำนวณซ้ำในที่อื่น ถ้าจะแก้สูตร แก้ที่นี่ที่เดียว แล้วให้ component ดึงค่า
-   จาก `computeMetrics()` เสมอ
-2. **สูตรพอร์ตมาจากไฟล์ Excel ที่ตรวจสอบแล้ว** — ก่อนแก้ไข logic ใด ๆ ในไฟล์นี้ ให้ทดสอบว่าเลขยังตรงกับ
-   ค่าอ้างอิงเดิม: `systemSize=5, selfConsumptionRatio=0.9, capexPerKw=30000, retailRate=4.4,
-   projectDiscountRate=0.07` ต้องได้ `projectNpv≈166,601`, `projectIrr≈20.1%`, `lcoe≈2.34`
-   ถ้ามีไฟล์ทดสอบ (ดูข้อ "งานที่ควรทำต่อ" ข้อ 1) ให้รันก่อน commit ทุกครั้ง
-3. **แบ่งค่าอินพุตเป็น 2 กลุ่มเสมอ**:
-   - **User-facing** (ปรับได้ในหน้าเว็บ): ทุกอย่างที่สะท้อนพฤติกรรมผู้ใช้ไฟ (ขนาดระบบ, สัดส่วนใช้เอง)
-     และทุกอย่างที่เกี่ยวกับการเงิน (ราคาติดตั้ง, ค่าไฟ, สินเชื่อ, ภาษี, discount rate)
-   - **Backend-only** (fix ค่าไว้ใน `defaultAssumptions`, ไม่มี UI ให้ปรับ): พารามิเตอร์ทางเทคนิคล้วน ๆ
-     ที่ผู้ใช้ทั่วไปไม่รู้จัก — capacityFactor, degradation, projectLife, omRate, inverterReplacement*,
-     generalInflation, fitRate/fitTerm/exportCapKw/taxDeductionCap (กำหนดโดยกฎหมาย ไม่ใช่ทางเลือกผู้ใช้)
-   - ถ้าจะเพิ่ม input ใหม่ ให้จัดหมวดตามกฎนี้ก่อนตัดสินใจว่าจะโชว์ใน UI หรือไม่
-4. **ธีมสี/ฟอนต์ที่ตั้งใจเลือกไว้แล้ว** — อย่าเปลี่ยนกลับไปเป็น default Tailwind blue/slate:
-   - สี: `sky-*` (เขียวอมฟ้าเข้ม, โทนความน่าเชื่อถือ/ท้องฟ้า) เป็นสีหลัก, `sun-*` (ส้ม/ทอง, โทนพลังงานแสงอาทิตย์)
-     เป็น accent, `paper` (#F6F4EE) เป็นพื้นหลังหลัก, `leaf`/`clay` สำหรับสถานะดี/แย่
-   - ฟอนต์: `font-display` (Kanit) สำหรับหัวข้อ/ตัวเลขใหญ่, `font-sans` (Sarabun) สำหรับ body/label
-   - ซิกเนเจอร์ของเว็บคือ `SunGauge.jsx` (เกจโค้งแสดงปีคืนทุน) — เป็น visual ที่จงใจออกแบบให้ผูกกับธีม
-     พลังงานแสงอาทิตย์ อย่าแทนที่ด้วย metric card ธรรมดา
-5. **ภาษาไทยเป็นภาษาหลักของ UI ทั้งหมด** ยกเว้น commit message / code comment ที่เขียนอังกฤษได้ตามปกติ
+1. **`src/lib/` คือ engine ทั้งหมด — pure JS ห้ามผูก React** แตกเป็นโมดูล:
+   `energy.js` (พลังงาน/แบต/เพดานส่งออก) → `costs.js` (CAPEX/OPEX line items) →
+   `finance.js` (debt schedule, ภาษี, metrics) โดย `calculations.js` เป็น orchestrator
+   (`computeProject(project)` = จุดเข้าเดียว) ส่วน `sensitivity.js`, `scoring.js`, `variants.js`
+   ต่อยอดจาก computeProject — **ห้ามคำนวณการเงินใน component เด็ดขาด**
+2. **ค่าอ้างอิงจาก Excel ที่ตรวจสอบแล้วถูก lock ไว้ในเทส** — เคส 5 kWp, selfConsumption 90%,
+   CAPEX 150,000฿, ค่าไฟ 4.4฿, discount 7% (โหมด personal) ต้องได้ `NPV≈166,601`,
+   `IRR≈20.1%`, `LCOE≈2.34` — ดู "legacy parity" ใน `finance.test.js` ถ้าแก้สูตรแล้วเทสนี้แดง
+   แปลว่าผลลัพธ์เพี้ยนจากต้นฉบับ **รัน `npm test` ก่อน commit ทุกครั้ง** (183 เทส)
+3. **Hard Rules จากสเปกที่ยังบังคับตลอด** (รายละเอียดเต็มใน SPEC-UPGRADE.md ข้อ 1):
+   - โปรเจกต์ใหม่**ว่างทุกช่อง** ไม่มีข้อมูลจำลอง — จุดที่ไม่มีข้อมูลใช้ empty state เสมอ
+   - ค่า prefill มีได้เฉพาะค่าคงที่เชิงกฎหมาย/ทางการ เป็น **preset แบบ opt-in** ที่แก้ได้เสมอ
+     พร้อมคำเตือนให้ตรวจประกาศล่าสุด (ดู `ENERGY_PRESETS` ใน `state.js` — MEA 2569:
+     2.2฿/kWh, 10 ปี, เพดาน 5kW) ห้ามเปลี่ยนค่าเหล่านี้โดยไม่แจ้ง
+   - โปร่งใสไม่มีกล่องดำ — ตัวเลขสรุปทุกตัวตรวจย้อนได้จากตาราง Cash Flow และหน้า "วิธีคำนวณ"
+     ต้องอัปเดตเมื่อสูตรเปลี่ยน
+   - มี disclaimer ทุกหน้าผลลัพธ์ (`ui/Disclaimer.jsx`)
+   - แบตเตอรี่ = 0 ต้องให้ผลเท่าไม่มีแบตเป๊ะ (มีเทส lock ไว้)
+4. **ทุก string ใน UI ต้องอยู่ใน locale file** — `src/locale/th.js` (หลัก) และ `en.js`
+   (mirror กัน มีเทส structural parity ใน `locale/locale.test.js` — เพิ่ม key ที่ไหนต้องเพิ่มทั้งคู่)
+   ห้าม hardcode ข้อความในหน้า component ป้ายคำตัดสินใน `th.verdicts` ต้องตรงกับ
+   `scoring.js` (มีเทสตรวจ)
+5. **ธีม Studio** (SPEC ข้อ 6): พื้น `surface` #F7F8FA, การ์ดขาว radius 14-16px ขอบ `line`,
+   สีหลัก `brand` (ส้มพลังงาน #F97316), บวก `ok` เขียว / ลบ `danger` แดง, ฟอนต์ Kanit
+   (หัวข้อ/ตัวเลข) + Sarabun (body) — token อยู่ที่เดียวใน `tailwind.config.js`
+6. **ของหนักต้อง lazy-load** — recharts (`components/charts/`) และ SheetJS (`lib/sheet.js`)
+   ถูก dynamic import แยก chunk แล้ว อย่า import แบบ static จาก initial bundle
 
 ## โครงสร้างไฟล์
 
 ```
 src/
-├── App.jsx                    ประกอบทุก component, จัดการ state ของ assumptions
-├── lib/
-│   ├── calculations.js        ★ สูตรการเงินทั้งหมด (ดูกติกาข้อ 1-2) + estimateSystemSize()
-│   │                            (helper แนะนำขนาดระบบจากหน่วยไฟที่ใช้ต่อเดือน ไม่ใช่ส่วนหนึ่งของ
-│   │                            financial model จึงไม่ต้องผ่าน computeMetrics())
-│   └── formatters.js          จัดรูปแบบตัวเลข/หน่วยเงิน
-└── components/
-    ├── Header.jsx              ส่วนหัว พร้อมลาย sun-ray SVG
-    ├── BehaviorInputs.jsx       ขนาดระบบ, พฤติกรรมใช้ไฟ (พร้อม preset), ราคา, ค่าไฟ
-    ├── FinanceInputs.jsx        สินเชื่อ (cash/loan toggle), ภาษี, discount rate
-    ├── ResultsSummary.jsx       ผลลัพธ์แบบ "ใบเสร็จ" มี SunGauge เป็น hero
-    ├── SunGauge.jsx             ★ signature visual — เกจโค้งแสดงปีคืนทุน
-    ├── CashflowChart.jsx        กราฟกระแสเงินสดสะสม (recharts)
-    ├── SegmentedControl.jsx     ปุ่มแท็บ (ใช้กับ cash/loan toggle)
-    ├── Slider.jsx / Card.jsx    UI พื้นฐานที่ใช้ซ้ำ
+├── main.jsx / App.jsx        HashRouter + shell (sidebar/topbar/routes + mobile drawer)
+├── lib/                      ★ engine ทั้งหมด — pure JS มีเทสประกบทุกไฟล์
+│   ├── calculations.js       orchestrator: computeProject(project)
+│   ├── energy.js             ผลผลิต/โหลด/แบต/เพดานส่งออก (annual + interval 12 เดือน)
+│   ├── costs.js              รวม CAPEX/OPEX จาก line items (VAT, replacement, escalation)
+│   ├── finance.js            debt schedule, ภาษี corporate/personal, NPV/IRR/Payback/LCOE/DSCR
+│   ├── sensitivity.js        ตาราง 5×5, break-even (bisection), 3 ฉาก
+│   ├── scoring.js            Screening Score 0-100 + verdict + dataChecks
+│   ├── variants.js           แปลงใบเสนอราคา (Variant) → Project แล้วรัน engine เดิม
+│   ├── riskChecks.js         คำเตือนอัตโนมัติบน dashboard
+│   ├── cashflowExport.js     รวมตาราง Cash Flow + serialize CSV
+│   ├── costItems.js          factories + CAPEX↔OPEX + แปลงแถว spreadsheet
+│   ├── state.js              AppState/Project data model, CRUD, presets, Export/Import JSON
+│   ├── persistence.js        localStorage (คีย์ solar-studio-state-v1) + debounced autosaver
+│   ├── sheet.js              SheetJS I/O (lazy import)
+│   └── formatters.js         จัดรูปแบบตัวเลข (formatYears รับ labels ต่อ locale)
+├── state/AppContext.jsx      React glue: useApp / useActiveProject / useProjectResult
+├── locale/th.js, en.js       ★ string ทั้งหมดของ UI (ดูกติกาข้อ 4)
+├── shell/                    Sidebar, TopBar, ScoreCard, EmptyState
+├── ui/                       Panel, Field, inputs, Segmented, Badge, Disclaimer
+├── components/charts/        recharts (lazy)
+└── pages/                    10 หน้า: Overview, ProjectSystem, Costs, Energy, Finance,
+                              Cashflow, Sensitivity, Comparison, Portfolio, Methodology
 ```
 
-## งานที่ควรทำต่อ (เรียงตามลำดับความสำคัญ)
-
-1. **เขียนเทสสำหรับ `calculations.js`** (Vitest) — ยังไม่มีเทสอัตโนมัติเลยตอนนี้ ตรวจสอบด้วยมือแล้วว่า
-   ตรงกับ Excel (ดูค่าอ้างอิงในกติกาข้อ 2) แต่ควร lock ไว้เป็นเทสกัน regression โดยเฉพาะ edge case:
-   เพดานส่งออก 5kW ทำงานถูกไหมเมื่อ systemSize>5, FiT ตัดหลังปีที่ 10 จริงไหม, DSCR/Payback ตอน
-   cash-only (loanEnabled=false) ต้องได้ `minDscr=null`
-2. **Responsive/mobile polish** — เลย์เอาต์ปัจจุบันเทสบน desktop เป็นหลัก ให้ตรวจสอบ breakpoint mobile
-   จริงจัง โดยเฉพาะ `SunGauge` กับกราฟที่อาจล้นจอเล็ก
-3. **Accessibility pass** — ใส่ `aria-label` ให้ slider ทุกตัว, ตรวจ contrast ของสี sun-300 บนพื้น sky-900,
-   ทดสอบ keyboard navigation
-4. **แชร์ผลลัพธ์ผ่าน URL** — encode `assumptions` ลง query string เมื่อ state เปลี่ยน (debounce)
-   แล้ว hydrate จาก URL ตอนโหลดหน้า จะได้แชร์ลิงก์พร้อมผลลัพธ์เฉพาะบุคคลได้โดยไม่ต้องมี backend
-5. **Analytics** — ต่อ Plausible หรือ GA เพื่อดูว่าคนกรอกค่าอะไรบ้าง จะได้ปรับ default ให้สอดคล้องผู้ใช้จริง
-6. **Export PDF/รูปสรุปผล** ให้ผู้ใช้ดาวน์โหลดไปดูภายหลังหรือส่งต่อผู้ติดตั้ง
-7. **Code splitting** — bundle ปัจจุบัน ~540KB (recharts เป็นตัวหลักที่หนัก) ลอง `dynamic import()` สำหรับ
-   `CashflowChart` เพื่อลด initial load
+เทส: `*.test.js(x)` ประกบไฟล์ engine + `Phase*.test.jsx` (jsdom) เทสระดับหน้า
 
 ## คำสั่งที่ใช้บ่อย
 
 ```bash
 npm run dev      # dev server, hot reload
-npm run build    # production build -> dist/
-npm run preview  # serve ไฟล์ที่ build แล้ว ทดสอบก่อน deploy
+npm test         # Vitest ทั้งชุด — ต้องผ่านก่อน commit
+npm run build    # production build -> dist/ (ต้องไม่มี error)
+npm run preview  # serve ไฟล์ที่ build แล้ว
 ```
 
 ## สิ่งที่ห้ามทำ
 
-- ห้ามเพิ่ม backend/database โดยไม่จำเป็น — โปรเจกต์นี้ตั้งใจให้เป็น static site ล้วน ๆ
-  (ยกเว้นงานข้อ 4-5 ที่ยังทำแบบ client-only ได้อยู่)
-- ห้ามเปลี่ยนค่า default ใน `defaultAssumptions` โดยไม่แจ้ง — โดยเฉพาะ `fitRate`, `fitTerm`,
-  `exportCapKw`, `taxDeductionCap` เพราะเป็นค่าที่อ้างอิงกฎหมาย/ประกาศจริง เปลี่ยนเองไม่ได้ตามใจ
+- ห้ามเพิ่ม backend/database — แอปนี้ตั้งใจเป็น static + offline (localStorage) ตามสเปก
+- ห้ามแก้ regulatory preset (`ENERGY_PRESETS`, `VAT_DEFAULT` ใน `state.js`) โดยไม่แจ้ง —
+  อ้างอิงประกาศจริง
+- ห้ามคำนวณการเงินนอก `src/lib/` หรือ import recharts/xlsx แบบ static
+- ห้ามเพิ่ม string ใน locale เดียวโดยไม่เพิ่มอีกภาษา (เทส parity จะแดง)
+- อย่าเปลี่ยน schema ของ AppState โดยไม่อัปเดต `normalizeProject`/`migrateAppState` —
+  save เก่าของผู้ใช้ต้องโหลดได้เสมอ (เติมค่า default ให้ฟิลด์ใหม่)
+
+## งานที่อาจทำต่อ (ไม่เรียงลำดับ — 7 Phases ตามสเปกเสร็จหมดแล้ว)
+
+1. **Deploy Vercel** — repo push ขึ้น GitHub แล้ว เหลือเชื่อมที่ vercel.com (Vite auto-detect)
+2. **Tax loss carry-forward** — โหมด corporate ปัจจุบันไม่ยกยอดขาดทุน (ระบุไว้ในสเปกว่า
+   เป็นข้อจำกัดของเวอร์ชันนี้)
+3. **Export PDF รายงาน** ต่อโครงการ สำหรับส่งผู้อนุมัติ/ลูกค้า
+4. **PWA/offline caching** ให้ติดตั้งเป็นแอปได้
+5. **แชร์โครงการผ่าน URL** (encode ลง query string) เสริมจาก Export JSON
