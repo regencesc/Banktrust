@@ -23,13 +23,14 @@ const MENU = [
   { to: "/methodology", key: "methodology" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onNavigate }) {
   const { state, apply, strings } = useApp();
   const navigate = useNavigate();
 
   const onAdd = () => {
     apply((s) => addProject(s, strings.sidebar.newProjectName).state);
     navigate("/project");
+    onNavigate?.();
   };
 
   const onDelete = (id) => {
@@ -38,7 +39,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 shrink-0 bg-white border-r border-line flex flex-col min-h-screen">
+    <aside className="w-64 shrink-0 bg-white border-r border-line flex flex-col min-h-screen h-full overflow-y-auto">
       {/* logo */}
       <div className="flex items-center gap-2.5 px-4 h-14 border-b border-line">
         <div className="w-8 h-8 rounded-lg bg-brand-500 text-white flex items-center justify-center">
@@ -112,13 +113,14 @@ export default function Sidebar() {
       </div>
 
       {/* menu */}
-      <nav className="px-3 pt-5 flex-1">
+      <nav className="px-3 pt-5 flex-1" aria-label={strings.app.name}>
         <ul className="space-y-0.5">
           {MENU.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}
                 end={item.to === "/"}
+                onClick={() => onNavigate?.()}
                 className={({ isActive }) =>
                   "flex items-center justify-between text-[13px] rounded-lg px-2.5 py-1.5 transition-colors " +
                   (isActive

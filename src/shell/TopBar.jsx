@@ -5,6 +5,7 @@ import {
   exportProjectJson,
   exportPortfolioJson,
   importJson,
+  setLanguage,
 } from "../lib/state.js";
 
 function downloadJson(filename, text) {
@@ -27,7 +28,7 @@ const btn =
   "rounded-lg border border-line bg-white hover:bg-surface text-xs font-medium " +
   "text-ink/70 px-3 py-1.5 transition-colors disabled:opacity-40 disabled:pointer-events-none";
 
-export default function TopBar() {
+export default function TopBar({ onOpenMenu }) {
   const { state, apply, saveStatus, strings } = useApp();
   const { project, update } = useActiveProject();
   const fileRef = useRef(null);
@@ -71,8 +72,18 @@ export default function TopBar() {
   };
 
   return (
-    <header className="h-14 shrink-0 bg-white border-b border-line flex items-center justify-between px-5 gap-4">
+    <header className="min-h-14 shrink-0 bg-white border-b border-line flex items-center justify-between px-3 sm:px-5 py-2 gap-3 flex-wrap">
       <div className="min-w-0 flex items-center gap-3">
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          aria-label={t.menu}
+          className="lg:hidden rounded-lg border border-line bg-white hover:bg-surface p-1.5 text-ink/60"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+            <path d="M2 4h12M2 8h12M2 12h12" />
+          </svg>
+        </button>
         <h1 className="font-display text-sm font-medium text-ink truncate">
           {project ? project.name : strings.app.tagline}
         </h1>
@@ -81,7 +92,29 @@ export default function TopBar() {
         )}
       </div>
 
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        <div
+          role="group"
+          aria-label={t.language}
+          className="inline-flex rounded-lg bg-surface border border-line p-0.5 mr-1"
+        >
+          {["th", "en"].map((lang) => (
+            <button
+              key={lang}
+              type="button"
+              aria-pressed={state.language === lang}
+              onClick={() => apply((s) => setLanguage(s, lang))}
+              className={
+                "px-2 py-1 text-[11px] font-semibold rounded-md uppercase transition-colors " +
+                (state.language === lang
+                  ? "bg-white text-brand-700 shadow-sm border border-line"
+                  : "text-ink/40 hover:text-ink")
+              }
+            >
+              {lang}
+            </button>
+          ))}
+        </div>
         {message && (
           <span
             className={`text-xs ${message.tone === "danger" ? "text-danger" : "text-ok"}`}

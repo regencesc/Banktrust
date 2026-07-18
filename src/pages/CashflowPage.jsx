@@ -9,6 +9,7 @@ import { downloadCsv } from "../lib/sheet.js";
 import { formatNumber } from "../lib/formatters.js";
 import Panel from "../ui/Panel.jsx";
 import Badge from "../ui/Badge.jsx";
+import Disclaimer from "../ui/Disclaimer.jsx";
 import EmptyState, { SunIcon } from "../shell/EmptyState.jsx";
 
 export default function CashflowPage() {
@@ -136,6 +137,8 @@ export default function CashflowPage() {
           </div>
         )}
       </Panel>
+
+      <Disclaimer />
     </div>
   );
 }

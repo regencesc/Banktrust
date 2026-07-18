@@ -8,6 +8,7 @@ import { deriveSystem } from "../lib/energy.js";
 import { formatTHB, formatPercent, formatYears, formatNumber } from "../lib/formatters.js";
 import Panel from "../ui/Panel.jsx";
 import Badge from "../ui/Badge.jsx";
+import Disclaimer from "../ui/Disclaimer.jsx";
 import EmptyState, { SunIcon } from "../shell/EmptyState.jsx";
 
 const verdictTone = { good: "ok", fair: "warn", poor: "danger" };
@@ -122,7 +123,10 @@ export default function PortfolioPage() {
                     <Td right>{formatPercent(r.metrics.equityIrr)}</Td>
                     <Td right>
                       {r.metrics.simplePayback !== null
-                        ? formatYears(r.metrics.simplePayback)
+                        ? formatYears(r.metrics.simplePayback, 1, {
+                            unit: strings.units.years,
+                            never: strings.common.neverPayback,
+                          })
                         : "-"}
                     </Td>
                     <Td right>
@@ -136,7 +140,7 @@ export default function PortfolioPage() {
                     <Td right>{r.score.total}</Td>
                     <Td>
                       <Badge tone={verdictTone[r.score.verdict.level]}>
-                        {r.score.verdict.label}
+                        {strings.verdicts[r.score.verdict.level]}
                       </Badge>
                     </Td>
                   </tr>
@@ -167,6 +171,8 @@ export default function PortfolioPage() {
           </p>
         )}
       </Panel>
+
+      <Disclaimer />
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
 } from "../lib/sensitivity.js";
 import { formatTHB, formatPercent, formatYears, formatNumber } from "../lib/formatters.js";
 import Panel from "../ui/Panel.jsx";
+import Disclaimer from "../ui/Disclaimer.jsx";
 import EmptyState, { SunIcon } from "../shell/EmptyState.jsx";
 
 export default function SensitivityPage() {
@@ -65,6 +66,10 @@ export default function SensitivityPage() {
 
   const [down, base, up] = scenarios;
   const e = project.energy;
+  const yearLabels = {
+    unit: strings.units.years,
+    never: strings.common.neverPayback,
+  };
 
   return (
     <div className="max-w-4xl space-y-5">
@@ -161,11 +166,26 @@ export default function SensitivityPage() {
             hint={t.scenarioDownsideHint}
             data={down}
             tone="danger"
+            yearLabels={yearLabels}
           />
-          <ScenarioCard name={t.scenarioBase} hint={t.scenarioBaseHint} data={base} tone="ink" />
-          <ScenarioCard name={t.scenarioUpside} hint={t.scenarioUpsideHint} data={up} tone="ok" />
+          <ScenarioCard
+            name={t.scenarioBase}
+            hint={t.scenarioBaseHint}
+            data={base}
+            tone="ink"
+            yearLabels={yearLabels}
+          />
+          <ScenarioCard
+            name={t.scenarioUpside}
+            hint={t.scenarioUpsideHint}
+            data={up}
+            tone="ok"
+            yearLabels={yearLabels}
+          />
         </div>
       </Panel>
+
+      <Disclaimer />
     </div>
   );
 }
@@ -214,7 +234,7 @@ const scenarioTone = {
   ok: "border-green-200 bg-green-50/50",
 };
 
-function ScenarioCard({ name, hint, data, tone }) {
+function ScenarioCard({ name, hint, data, tone, yearLabels }) {
   return (
     <div className={`rounded-xl border p-4 ${scenarioTone[tone]}`}>
       <div className="flex items-baseline justify-between">
@@ -228,7 +248,7 @@ function ScenarioCard({ name, hint, data, tone }) {
           </span>
         </Row>
         <Row label="Equity IRR">{formatPercent(data.equityIrr)}</Row>
-        <Row label="Payback">{formatYears(data.simplePayback)}</Row>
+        <Row label="Payback">{formatYears(data.simplePayback, 1, yearLabels)}</Row>
       </dl>
     </div>
   );

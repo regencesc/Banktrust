@@ -17,6 +17,7 @@ import { createAppState, getActiveProject, updateProject } from "../lib/state.js
 import { createAutosaver, loadState } from "../lib/persistence.js";
 import { computeProject } from "../lib/calculations.js";
 import { th } from "../locale/th.js";
+import { en } from "../locale/en.js";
 
 const AppContext = createContext(null);
 
@@ -56,8 +57,18 @@ export function AppProvider({ children }) {
     setState((prev) => (typeof updater === "function" ? updater(prev) : updater));
   }, []);
 
+  // Keep the document language in sync for screen readers / hyphenation.
+  useEffect(() => {
+    document.documentElement.lang = state.language;
+  }, [state.language]);
+
   const value = useMemo(
-    () => ({ state, apply, saveStatus, strings: th }),
+    () => ({
+      state,
+      apply,
+      saveStatus,
+      strings: state.language === "en" ? en : th,
+    }),
     [state, apply, saveStatus]
   );
 

@@ -13,9 +13,12 @@ export function formatPercent(value, decimals = 1) {
   return (value * 100).toFixed(decimals) + "%";
 }
 
-export function formatYears(value, decimals = 1) {
-  if (value === null || value === undefined || !isFinite(value)) return "ไม่คืนทุน";
-  return value.toFixed(decimals) + " ปี";
+export function formatYears(value, decimals = 1, labels = {}) {
+  // defaults stay Thai for backward compatibility; pass locale labels for en
+  const unit = labels.unit ?? "ปี";
+  const never = labels.never ?? "ไม่คืนทุน";
+  if (value === null || value === undefined || !isFinite(value)) return never;
+  return value.toFixed(decimals) + " " + unit;
 }
 
 export function formatNumber(value, decimals = 0) {

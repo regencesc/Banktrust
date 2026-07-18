@@ -7,6 +7,7 @@ import Panel from "../ui/Panel.jsx";
 import Field from "../ui/Field.jsx";
 import { NumberInput, TextInput } from "../ui/inputs.jsx";
 import Badge from "../ui/Badge.jsx";
+import Disclaimer from "../ui/Disclaimer.jsx";
 import EmptyState, { SunIcon } from "../shell/EmptyState.jsx";
 
 const verdictTone = { good: "ok", fair: "warn", poor: "danger" };
@@ -81,6 +82,7 @@ export default function ComparisonPage() {
                 <button
                   type="button"
                   title={t.deletePackage}
+                  aria-label={`${t.deletePackage}: ${v.name || "-"}`}
                   onClick={() => removeVariant(v.id)}
                   className="text-danger hover:bg-red-50 text-xs font-medium px-1.5 py-0.5 rounded"
                 >
@@ -177,16 +179,19 @@ export default function ComparisonPage() {
                 isBest={e.variant.id === comparison.bestNpvId}
                 isFastest={e.variant.id === comparison.fastestId}
                 t={t}
+                strings={strings}
               />
             ))}
           </div>
         </>
       )}
+
+      <Disclaimer />
     </div>
   );
 }
 
-function ResultCard({ evaluated: e, isBest, isFastest, t }) {
+function ResultCard({ evaluated: e, isBest, isFastest, t, strings }) {
   const m = e.metrics;
   return (
     <div
@@ -206,7 +211,9 @@ function ResultCard({ evaluated: e, isBest, isFastest, t }) {
         </div>
         <div className="flex gap-1">
           {isFastest && <Badge tone="brand">⚡ {t.fastest}</Badge>}
-          <Badge tone={verdictTone[e.score.verdict.level]}>{e.score.verdict.label}</Badge>
+          <Badge tone={verdictTone[e.score.verdict.level]}>
+            {strings.verdicts[e.score.verdict.level]}
+          </Badge>
         </div>
       </div>
 
@@ -221,7 +228,7 @@ function ResultCard({ evaluated: e, isBest, isFastest, t }) {
         >
           {m.simplePayback === null
             ? t.neverPayback
-            : `${formatNumber(m.simplePayback, 1)} ปี`}
+            : `${formatNumber(m.simplePayback, 1)} ${strings.units.years}`}
         </div>
       </div>
 

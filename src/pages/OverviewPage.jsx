@@ -5,6 +5,7 @@ import { addProject } from "../lib/state.js";
 import { buildRiskChecks } from "../lib/riskChecks.js";
 import { formatTHB, formatPercent, formatYears, formatNumber } from "../lib/formatters.js";
 import Panel from "../ui/Panel.jsx";
+import Disclaimer from "../ui/Disclaimer.jsx";
 import EmptyState, { SunIcon } from "../shell/EmptyState.jsx";
 
 const CumulativeChart = lazy(() =>
@@ -46,6 +47,10 @@ export default function OverviewPage() {
   const m = result.metrics;
   const f = project.finance;
   const e = project.energy;
+  const yearLabels = {
+    unit: strings.units.years,
+    never: strings.common.neverPayback,
+  };
   const year1 = result.energySeries[0];
   const hasChartData = result.grossCapex > 0 || year1.grossYield > 0;
   const risks = buildRiskChecks(project, result);
@@ -76,9 +81,13 @@ export default function OverviewPage() {
         />
         <Kpi
           label={t.kpiPayback}
-          value={formatYears(m.simplePayback)}
+          value={formatYears(m.simplePayback, 1, yearLabels)}
           tone={m.simplePayback === null ? "danger" : "ink"}
-          sub={m.discountedPayback != null ? t.kpiPaybackSub(formatYears(m.discountedPayback)) : null}
+          sub={
+            m.discountedPayback != null
+              ? t.kpiPaybackSub(formatYears(m.discountedPayback, 1, yearLabels))
+              : null
+          }
         />
         <Kpi
           label={t.kpiLcoe}
@@ -196,6 +205,8 @@ export default function OverviewPage() {
           )}
         </Panel>
       </div>
+
+      <Disclaimer />
     </div>
   );
 }

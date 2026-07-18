@@ -165,43 +165,46 @@ export default function CostsPage() {
           return (
             <>
               <Td w="w-24">
-                <CellText value={item.category} onChange={(v) => up({ category: v })} />
+                <CellText value={item.category} onChange={(v) => up({ category: v })} ariaLabel={t.colCategory} />
               </Td>
               <Td w="w-40">
-                <CellText value={item.name} onChange={(v) => up({ name: v })} />
+                <CellText value={item.name} onChange={(v) => up({ name: v })} ariaLabel={t.colName} />
               </Td>
               <Td w="w-28">
-                <CellText value={item.spec} onChange={(v) => up({ spec: v })} />
+                <CellText value={item.spec} onChange={(v) => up({ spec: v })} ariaLabel={t.colSpec} />
               </Td>
               <Td w="w-16">
-                <CellNum value={item.qty} onChange={(v) => up({ qty: v })} />
+                <CellNum value={item.qty} onChange={(v) => up({ qty: v })} ariaLabel={t.colQty} />
               </Td>
               <Td w="w-16">
-                <CellText value={item.unit} onChange={(v) => up({ unit: v })} />
+                <CellText value={item.unit} onChange={(v) => up({ unit: v })} ariaLabel={t.colUnit} />
               </Td>
               <Td w="w-24">
-                <CellNum value={item.unitPrice} onChange={(v) => up({ unitPrice: v })} />
+                <CellNum value={item.unitPrice} onChange={(v) => up({ unitPrice: v })} ariaLabel={t.colUnitPrice} />
               </Td>
               <Td w="w-16">
                 <CellNum
                   value={item.discountPct}
                   onChange={(v) => up({ discountPct: v })}
                   percent
+                  ariaLabel={t.colDiscount}
                 />
               </Td>
               <Td w="w-16">
-                <CellNum value={item.vatPct} onChange={(v) => up({ vatPct: v })} percent />
+                <CellNum value={item.vatPct} onChange={(v) => up({ vatPct: v })} percent ariaLabel={t.colVat} />
               </Td>
               <Td w="w-16">
                 <CellNum
                   value={item.replacementYear}
                   onChange={(v) => up({ replacementYear: v })}
+                  ariaLabel={t.colReplYear}
                 />
               </Td>
               <Td w="w-14">
                 <CellNum
                   value={item.replacementCycles}
                   onChange={(v) => up({ replacementCycles: v })}
+                  ariaLabel={t.colReplCycles}
                 />
               </Td>
               <Td w="w-16">
@@ -209,6 +212,7 @@ export default function CostsPage() {
                   value={item.replacementPct}
                   onChange={(v) => up({ replacementPct: v })}
                   percent
+                  ariaLabel={t.colReplPct}
                 />
               </Td>
               <Td w="w-24" className="text-right font-medium">
@@ -234,6 +238,7 @@ export default function CostsPage() {
                   <button
                     type="button"
                     title={t.deleteItem}
+                    aria-label={`${t.deleteItem}: ${item.name || "-"}`}
                     onClick={() => removeItem(costs.capexItems, setCapex)(item.id)}
                     className={`${iconBtn} text-danger hover:bg-red-50`}
                   >
@@ -288,15 +293,16 @@ export default function CostsPage() {
           return (
             <>
               <Td w="w-28">
-                <CellText value={item.category} onChange={(v) => up({ category: v })} />
+                <CellText value={item.category} onChange={(v) => up({ category: v })} ariaLabel={t.colCategory} />
               </Td>
               <Td w="w-48">
-                <CellText value={item.name} onChange={(v) => up({ name: v })} />
+                <CellText value={item.name} onChange={(v) => up({ name: v })} ariaLabel={t.colName} />
               </Td>
               <Td w="w-28">
                 <CellNum
                   value={item.costPerOccurrence}
                   onChange={(v) => up({ costPerOccurrence: v })}
+                  ariaLabel={t.colCost}
                 />
               </Td>
               <Td w="w-20">
@@ -304,18 +310,20 @@ export default function CostsPage() {
                   value={item.escalationPct}
                   onChange={(v) => up({ escalationPct: v })}
                   percent
+                  ariaLabel={t.colEscalation}
                 />
               </Td>
               <Td w="w-16">
-                <CellNum value={item.startYear} onChange={(v) => up({ startYear: v })} />
+                <CellNum value={item.startYear} onChange={(v) => up({ startYear: v })} ariaLabel={t.colStartYear} />
               </Td>
               <Td w="w-16">
-                <CellNum value={item.endYear} onChange={(v) => up({ endYear: v })} />
+                <CellNum value={item.endYear} onChange={(v) => up({ endYear: v })} ariaLabel={t.colEndYear} />
               </Td>
               <Td w="w-16">
                 <CellNum
                   value={item.everyNYears}
                   onChange={(v) => up({ everyNYears: v })}
+                  ariaLabel={t.colEveryN}
                 />
               </Td>
               <Td w="w-32">
@@ -330,6 +338,7 @@ export default function CostsPage() {
                   <button
                     type="button"
                     title={t.deleteItem}
+                    aria-label={`${t.deleteItem}: ${item.name || "-"}`}
                     onClick={() => removeItem(costs.opexItems, setOpex)(item.id)}
                     className={`${iconBtn} text-danger hover:bg-red-50`}
                   >
@@ -416,7 +425,11 @@ function CostTablePanel({
             <thead>
               <tr className="text-ink/40 border-b border-line text-left">
                 {headers.map((h, i) => (
-                  <th key={i} className="py-2 px-1.5 font-medium whitespace-nowrap">
+                  <th
+                    key={i}
+                    scope="col"
+                    className="py-2 px-1.5 font-medium whitespace-nowrap"
+                  >
                     {h}
                   </th>
                 ))}
@@ -457,18 +470,19 @@ function RowActions({ children }) {
   return <div className="flex items-center gap-0.5 justify-end">{children}</div>;
 }
 
-function CellText({ value, onChange }) {
+function CellText({ value, onChange, ariaLabel }) {
   return (
     <input
       type="text"
       className={cellInput}
       value={value ?? ""}
+      aria-label={ariaLabel}
       onChange={(e) => onChange(e.target.value)}
     />
   );
 }
 
-function CellNum({ value, onChange, percent = false }) {
+function CellNum({ value, onChange, percent = false, ariaLabel }) {
   const display =
     value === null || value === undefined
       ? ""
@@ -480,6 +494,7 @@ function CellNum({ value, onChange, percent = false }) {
       type="number"
       className={`${cellInput} text-right`}
       value={display}
+      aria-label={ariaLabel}
       onChange={(e) => {
         const raw = e.target.value;
         if (raw === "") return onChange(null);

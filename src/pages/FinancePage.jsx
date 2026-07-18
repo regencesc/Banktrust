@@ -6,6 +6,7 @@ import Field from "../ui/Field.jsx";
 import { NumberInput, ComputedValue } from "../ui/inputs.jsx";
 import Segmented from "../ui/Segmented.jsx";
 import Badge from "../ui/Badge.jsx";
+import Disclaimer from "../ui/Disclaimer.jsx";
 import EmptyState, { SunIcon } from "../shell/EmptyState.jsx";
 
 export default function FinancePage() {
@@ -296,6 +297,8 @@ export default function FinancePage() {
           )}
         </div>
       </Panel>
+
+      <Disclaimer />
     </div>
   );
 }

@@ -258,6 +258,7 @@ export default function EnergyPage() {
                           value={m.loadKwh}
                           onChange={(v) => patchMonth(i, "loadKwh", v)}
                           disabled={false}
+                          ariaLabel={`${t.colLoad} ${t.colMonth} ${m.month}`}
                         />
                       </td>
                       <td className="py-1 px-2 w-32">
@@ -265,6 +266,7 @@ export default function EnergyPage() {
                           value={m.pvKwh}
                           onChange={(v) => patchMonth(i, "pvKwh", v)}
                           disabled={e.usePvFromProfile === false}
+                          ariaLabel={`${t.colPv} ${t.colMonth} ${m.month}`}
                         />
                       </td>
                     </tr>
@@ -372,10 +374,11 @@ function SummaryItem({ label, value }) {
   );
 }
 
-function ProfileCell({ value, onChange, disabled }) {
+function ProfileCell({ value, onChange, disabled, ariaLabel }) {
   return (
     <input
       type="number"
+      aria-label={ariaLabel}
       className={
         "w-full rounded border px-1.5 py-1 text-xs tabular-nums text-right " +
         (disabled
